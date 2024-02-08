@@ -14,14 +14,14 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
+	return view('dashboard.general-dashboard');
+	return view('dashboard.index');
 	return view('authenticate.login');
 	return view('authenticate.reset-password');
 	return view('authenticate.forgot-password');
-	return view('dashboard.index');
 	abort(403);
 	abort(403, "TEST");
 	abort(500);
-	abort(404);
     //return view('welcome');
 	//return view('index');
 	//return view('dashboard.ecommerce-dashboard');
