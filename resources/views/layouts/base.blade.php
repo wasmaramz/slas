@@ -25,8 +25,6 @@
 		</head>
 
 		<body>
-			@yield ('body-content')
-
 			@section ('footer-refer')
 				<!-- General JS Scripts -->
 				<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
@@ -35,11 +33,21 @@
 				<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.nicescroll/3.7.6/jquery.nicescroll.min.js"></script>
 				<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
 				<script src="/assets/js/stisla.js"></script>
+
+				<!-- refer=https://jqueryvalidation.org/ -->
+				<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script> 
+				<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/additional-methods.min.js"></script>
+
+				<!-- Sweert Alert Pop Up -->
+				<script src="/node_modules/sweetalert/dist/sweetalert.min.js"></script>
 			@show
 
 			<!-- Template JS File -->
 			<script src="/assets/js/scripts.js"></script>
 			<script src="/assets/js/custom.js"></script>
+
+			<!-- Body Content -->
+			@yield ('body-content')
 		</body>
 	</html>
 @else 
