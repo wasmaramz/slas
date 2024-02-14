@@ -1,9 +1,7 @@
 @extends ('layouts.base')
 
 @section ('header-title')
-{{--
 	<title>Dashboard - {{ env('APP_NAME') }}</title>
---}}
 @endsection
 
 @section ('header-refer')
@@ -15,10 +13,8 @@
 	<!-- All Page CSS Files -->
 
 	<!-- Page Specific CSS Libraries -->
-	@yield ('specific-css-libraries')
-
-	<!-- Page Specific CSS Files -->
-	@yield ('specific-css-files')
+	<link rel="stylesheet" href="/node_modules/owl.carousel/dist/assets/owl.carousel.min.css">
+	<link rel="stylesheet" href="/node_modules/owl.carousel/dist/assets/owl.theme.default.min.css">
 @endsection
 
 @section ('body-content')
@@ -57,8 +53,6 @@
 	<!-- All Page JS Files -->
 
 	<!-- Page Specific JS Libraries -->
-	@yield ('specific-js-libraries')
-
-	<!-- Page Specific JS Files -->
-	@yield ('specific-js-files')
+	<script src="/node_modules/jquery-sparkline/jquery.sparkline.min.js"></script>
+	<script src="/node_modules/owl.carousel/dist/owl.carousel.min.js"></script>
 @endsection
