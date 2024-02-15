@@ -34,12 +34,11 @@
 				<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
 				<script src="/assets/js/stisla.js"></script>
 
-				<!-- refer=https://jqueryvalidation.org/ -->
+				<!-- Other JS Libraries -->
 				<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script> 
 				<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/additional-methods.min.js"></script>
-
-				<!-- Sweert Alert Pop Up -->
 				<script src="/node_modules/sweetalert/dist/sweetalert.min.js"></script>
+				<script src="/js/jquery.inputmask.min.js"></script>
 			@show
 
 			<!-- Template JS File -->

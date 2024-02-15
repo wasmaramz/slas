@@ -1,7 +1,7 @@
 <!-- LAYOUT: FOOTER -->
 <div class="footer-left">
-	Copyright &copy; 2018 <div class="bullet"></div> Design By <a href="https://nauv.al/">Muhamad Nauval Azhar</a>
+	Copyright &copy; 2024 <div class="bullet"></div> Design By <a target="_blank" href="https://github.com/wasmaramz">Wan Asmar Amzar</a>
 </div>
 <div class="footer-right">
-	2.3.0
+	1.1.1
 </div>
