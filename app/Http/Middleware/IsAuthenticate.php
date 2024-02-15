@@ -24,7 +24,7 @@ class IsAuthenticate
 			return $next($request);
 		}
 		else {
-			return route('logout');
+			return redirect('/logout');
 		}
     }
 }
