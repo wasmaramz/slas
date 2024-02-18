@@ -222,14 +222,14 @@
 			</a>
 			<div class="dropdown-menu dropdown-menu-right">
 				<div class="dropdown-title">{{ session('sess_level_name') }}</div>
-				<a href="javascript:void(0)" class="dropdown-item has-icon" onclick="$('.section').load('/edit/profile/{{ session('sess_user_id') }}')">
+				<a href="javascript:void(0)" class="dropdown-item has-icon" onclick="$('.section').load('/edit/profile')">
 					<i class="far fa-user"></i> Edit Profile
 				</a>
-				<a href="javascript:void(0)" class="dropdown-item has-icon" onclick="swal('Notice!', 'This is Change Password feature.', 'info')">
+				<a href="javascript:void(0)" class="dropdown-item has-icon" onclick="$('.section').load('/change/password')">
 					<i class="fas fa-key"></i> Change Password
 				</a>
 				<div class="dropdown-divider"></div>
-				<a href="/logout" class="dropdown-item has-icon text-danger">
+				<a class="dropdown-item has-icon text-danger" onclick="confirm_logout()">
 					<i class="fas fa-sign-out-alt"></i> Logout
 				</a>
 			</div>
