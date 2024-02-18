@@ -27,11 +27,12 @@
 						</div>
 						<div class="form-group row mb-2">
 							<label class="col-md-3 col-form-label font-weight-bold">Email</label>
-							<div class="col-md-6">
+							<div class="col-md-4">
 								<div class="input-group">
 									<label class="form-control mb-0">{{ $user->user_email }}</label>
 									<div class="input-group-append">
-										<button class="input-group-text btn btn-secondary" onclick="change_email()">
+										<button type="button" class="input-group-text btn btn-icon btn-outline-secondary" title="Change Email" onclick="change_email()">
+											<i class="fas fa-edit"></i>
 										</button>
 									</div>
 								</div>
@@ -39,8 +40,8 @@
 						</div>
 						<div class="form-group row mb-0">
 							<label class="col-md-3 col-form-label font-weight-bold" for="nophone">No. Phone</label>
-							<div class="col-md-4">
-								<input type="text" class="form-control" id="nophone" name="nophone">
+							<div class="col-md-3">
+								<input type="text" class="form-control" id="nophone" name="nophone" value="{{ $user->user_nophone }}">
 							</div>
 						</div>
 
@@ -48,23 +49,47 @@
 							<div class="section-title">Student Details</div>
 
 							<div class="form-group row mb-2">
+								{{--
+								<!--
 								<label class="col-md-3 col-form-label font-weight-bold" for="sfname">Fullname <span class="text-danger">*</span></label>
 								<div class="col-md-9">
-									<input type="text" class="form-control" id="sfname" name="sfname">
+									<input type="text" class="form-control" id="sfname" name="sfname" value="{{ $user->stud_fullname }}">
+								</div>
+								-->
+								--}}
+								<label class="col-md-3 col-form-label font-weight-bold">Fullname</label>
+								<div class="col-md-9">
+									<label class="col-form-label mb-0">{{ $user->stud_fullname }}</label>
 								</div>
 							</div>
 
 							<div class="form-group row mb-2">
+								{{--
+								<!--
 								<label class="col-md-3 col-form-label font-weight-bold" for="snomat">No. Matric <span class="text-danger">*</span></label>
 								<div class="col-md-4">
-									<input type="text" class="form-control" id="snomat" name="snomat">
+									<input type="text" class="form-control" id="snomat" name="snomat" value="{{ $user->stud_nomat }}">
+								</div>
+								-->
+								--}}
+								<label class="col-md-3 col-form-label font-weight-bold">No. Matric</label>
+								<div class="col-md-9">
+									<label class="col-form-label mb-0">{{ $user->stud_nomat }}</label>
 								</div>
 							</div>
 
 							<div class="form-group row mb-2">
-								<label class="col-md-3 col-form-label font-weight-bold" for="snoic">No. MyKad <span class="text-danger">*</span></label>
+								{{--
+								<!--
+								<label class="col-md-3 col-form-label font-weight-bold" for="snokp">No. MyKad <span class="text-danger">*</span></label>
 								<div class="col-md-4">
-									<input type="text" class="form-control" id="snoic" name="snoic">
+									<input type="text" class="form-control" id="snokp" name="snokp" value="{{ $user->stud_nokp }}">
+								</div>
+								-->
+								--}}
+								<label class="col-md-3 col-form-label font-weight-bold">No. MyKad</label>
+								<div class="col-md-9">
+									<label class="col-form-label mb-0">{{ $user->stud_nokp }}</label>
 								</div>
 							</div>
 
@@ -93,8 +118,33 @@
 	<script>
 		$(document).ready(function(){
 			$('#nophone').inputmask({ regex: "^[0-9]*$"});
-			$('#snoic').inputmask('999999-99-9999');
-			$('#snomat').inputmask({ regex: "^[0-9]*$"});
+			//$('#snomat').inputmask({ regex: "^[0-9]*$"});
+			//$('#snokp').inputmask('999999-99-9999');
 		});
+
+		function change_email(){
+			swal("Still in Development.", "This is change email button function.", 'info');
+		}
+
+		$('#EditProfileForm').validate({
+			rules:{
+			},
+			message:{
+			},
+			submitHandler: function(form){
+				$.ajax({
+					url: "/edit/profile",
+					type: "post",
+					dataType: "json",
+					data: $(form).serialize(),
+					success: function(resp){
+						if (resp.success) {
+							$('.section').load('/edit/profile');
+						}
+					}
+				});
+			}
+		});
+
 	</script>
 @endsection

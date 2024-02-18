@@ -19,37 +19,4 @@ class Dashboard extends Controller
 	}
 
 
-	public function edit_profile(Request $request)
-	{
-		if ($request->isMethod('post')) {
-			return $this->proc_edit_profile($request);
-		}
-
-		if (empty($request->user_id)) {
-			abort('500', 'Not Enough Informations.');
-		}
-		else if (
-			!$check_user = DB::table('users as usr')
-				->select('usr.*', 'lvl.*', 'usr.level_id', 'usr.user_id', 'std.*', 'std.prog_id', 'prg.*')
-				->join('levels as lvl', 'lvl.level_id', 'usr.level_id')
-				->leftJoin('students as std', 'std.user_id', 'usr.user_id')
-				->leftJoin('programs as prg', 'prg.prog_id', 'std.prog_id')
-				->where('usr.user_id', $request->user_id)
-				->first()
-		)
-		{
-			abort('404', 'No Record Founded.');
-		}
-		else 
-		{
-			return view('dashboard.edit-profile', [
-				'user' => $check_user,
-			]);
-		}
-	}
-
-
-	private function proc_edit_profile($request)
-	{
-	}
 }

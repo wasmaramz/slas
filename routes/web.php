@@ -10,6 +10,10 @@ Route::controller(App\Http\Controllers\Authenticate::class)->group(function(){
 Route::middleware(App\Http\Middleware\IsAuthenticate::class)->group(function(){
 	Route::controller(App\Http\Controllers\Dashboard::class)->group(function(){
 		Route::get('/', 'index');
-		Route::match(['get', 'post'], '/edit/profile/{user_id?}', 'edit_profile');
+	});
+
+	Route::controller(App\Http\Controllers\Profile::class)->group(function(){
+		Route::match(['get', 'post'], '/edit/profile', 'edit_profile');
+		Route::match(['get', 'post'], '/change/password', 'change_password');
 	});
 });

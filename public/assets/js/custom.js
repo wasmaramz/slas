@@ -9,6 +9,21 @@
 
 "use strict";
 
+function confirm_logout() {
+	swal({
+		title: 'Logout!',
+		text: 'Are you sure you want to logout?',
+		icon: 'warning',
+		buttons: ["Cancel", "Logout"],
+		dangerMode: true,
+	})
+	.then((willLogout) => {
+		if (willLogout) {
+			window.location.href = "/logout";
+		}
+	});
+} 
+
 // modify default setting for jquery validation
 $.validator.setDefaults({
 	errorElement: "div",
@@ -39,7 +54,7 @@ $.validator.addMethod("regex", function(value, element, regexp){
 // auto sweet alert pop up after form submitted using ajax
 $(document).on('ajaxSuccess', function(event, xhr, settings, data){
 	if(settings.dataType == "json"){
-		if('success' in data && 'msg' in data){
+		if((typeof data === 'object' && data !== null) && 'success' in data && 'msg' in data){
 			if(data.success){
 				swal('Success!!', data.msg, 'success');
 			}
