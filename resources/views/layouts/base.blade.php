@@ -35,9 +35,12 @@
 				<script src="/assets/js/stisla.js"></script>
 
 				<!-- Other JS Libraries -->
+				{{-- reference = 'https://jqueryvalidation.org/' --}}
 				<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script> 
 				<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/additional-methods.min.js"></script>
+				{{-- reference = 'https://sweetalert.js.org/' --}}
 				<script src="/node_modules/sweetalert/dist/sweetalert.min.js"></script>
+				{{-- reference = 'https://robinherbots.github.io/' --}}
 				<script src="/js/jquery.inputmask.min.js"></script>
 			@show
 
