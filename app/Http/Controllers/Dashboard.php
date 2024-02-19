@@ -11,11 +11,7 @@ class Dashboard extends Controller
 	{
 		$sess_level_id = session('sess_level_id');
 
-		$dir_level = strtolower($sess_level_id);
-
-		$dashboard_url = "dashboard.$dir_level.index";
-
-		return view($dashboard_url);
+		return view("dashboard.index");
 	}
 
 

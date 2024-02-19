@@ -101,7 +101,7 @@
 			rules:{
 				username:{
 					required: true,
-					regex: "^[A-Za-z0-9]+$",
+					//regex: "^[A-Za-z0-9]+$",
 				},
 				password:{
 					required: true,
@@ -110,7 +110,7 @@
 			messages:{
 				username:{
 					required: "Please enter User ID.",
-					regex: "Please enter valid User ID.",
+					//regex: "Please enter valid User ID.",
 				},
 				password:{
 					required: "Please enter Password.",
@@ -125,6 +125,9 @@
 					success: function(resp) {
 						if (resp.success) {
 							window.location.href = "/"; 
+						}
+						else {
+							$('#username, #password').val("");
 						}
 					}
 				});

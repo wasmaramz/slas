@@ -16,21 +16,21 @@
 						<div class="form-group row mb-2">
 							<label class="col-md-3 col-form-label font-weight-bold" for="currpsswd">Current Password</label>
 							<div class="col-md-5">
-								<input type="text" class="form-control" id="currpsswd" name="currpsswd">
+								<input type="password" class="form-control" id="currpsswd" name="currpsswd">
 							</div>
 						</div>
 
 						<div class="form-group row mb-2">
 							<label class="col-md-3 col-form-label font-weight-bold" for="newpsswd">New Password</label>
 							<div class="col-md-5">
-								<input type="text" class="form-control" id="newpsswd" name="newpsswd">
+								<input type="password" class="form-control" id="newpsswd" name="newpsswd">
 							</div>
 						</div>
 
 						<div class="form-group row mb-2">
 							<label class="col-md-3 col-form-label font-weight-bold" for="confpsswd">Current Password</label>
 							<div class="col-md-5">
-								<input type="text" class="form-control" id="confpsswd" name="confpsswd">
+								<input type="password" class="form-control" id="confpsswd" name="confpsswd">
 							</div>
 						</div>
 						
@@ -55,8 +55,32 @@
 	<script>
 		$('#ChangePasswordForm').validate({
 			rules: {
+				currpsswd: {
+					required: true,
+				},
+				newpsswd: {
+					required: true,
+					//minlength: 8, 
+				},
+				confpsswd: {
+					required: true,
+					//minlength: 8, 
+					equalTo: "#newpsswd",
+				},
 			},
 			messages: {
+				currpsswd: {
+					required: "Please enter your Current Password.",
+				},
+				newpsswd: {
+					required: "Please enter your New Password.",
+					//minlength: "Password must be at least 8 characters.", 
+				},
+				confpsswd: {
+					required: "Please confirm your Password.",
+					//minlength: "Password must be at least 8 characters.", 
+					equalTo: "Your Confirm Password Is Not Match.",
+				},
 			},
 			submitHandler: function(form) {
 				var form_data = $(form).serialize();
@@ -70,7 +94,17 @@
 				})
 				.then((willLogout) => {
 					if (willLogout) {
-						swal("Still in Development.", "This is change email button function.", 'info');
+						$.ajax({
+							url: "/change/password",
+							type: "post",
+							dataType: "json",
+							data: form_data,
+							success: function(resp){
+								if (resp.success){
+									$('.section').load('/change/password');
+								}
+							}
+						});
 					}
 				});
 			}
