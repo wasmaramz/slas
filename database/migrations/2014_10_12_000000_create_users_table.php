@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->increments('user_id');
-            $table->string('user_name', 100);
+            $table->string('user_fullname');
+            $table->string('user_name', 100)->unique();
             $table->string('password');
             $table->string('level_id', 10);
             $table->enum('user_status', ["1", "2", "3"]); // 1: AKTIVE, 2: PENDING, 3: INACTIVE
@@ -23,6 +24,7 @@ return new class extends Migration
             $table->integer('updated_by')->unsigned();
             $table->timestamps();
 
+			$table->index('user_fullname');
 			$table->index('user_name');
 			$table->index('level_id');
 			$table->index('user_status');

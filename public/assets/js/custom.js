@@ -51,19 +51,38 @@ $.validator.addMethod("regex", function(value, element, regexp){
 	return this.optional(element) || reg.test(value);
 });
 
+// standardize response swal message ...
+function pop_swal(icon, message){
+	if (icon == 'success') {
+		swal('Success!', message, 'success');
+	}
+	else if (icon == 'warning') {
+		swal('Failed!', message, 'warning');
+	}
+	else if (icon == 'info') {
+		swal('Notice!', message, 'info');
+	}
+	else if (icon == 'error') {
+		swal('Error!', message, 'error');
+	}
+	else {
+		swal(message);
+	}
+}
+
 // auto sweet alert pop up after form submitted using ajax
 $(document).on('ajaxSuccess', function(event, xhr, settings, data){
 	if(settings.dataType == "json"){
 		if((typeof data === 'object' && data !== null) && 'success' in data && 'msg' in data){
 			if(data.success){
-				swal('Success!!', data.msg, 'success');
+				pop_swal('success', data.msg);
 			}
 			else{
-				swal('Failed!', data.msg, 'warning');
+				pop_swal('warning', data.msg);
 			}
 		}
 		else{
-			swal('Error!', data, 'error');
+			pop_swal('error', data);
 		}
 	}
 });

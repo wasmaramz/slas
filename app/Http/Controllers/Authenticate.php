@@ -46,6 +46,7 @@ class Authenticate extends Controller
 			session()->regenerate();
 			session([
 				"sess_user_id" => $user->user_id,
+				"sess_user_fullname" => $user->user_fullname,
 				"sess_user_name" => $user->user_name,
 				"sess_level_id" => $level->level_id,
 				"sess_level_name" => $level->level_name,
@@ -62,11 +63,12 @@ class Authenticate extends Controller
 	}
 
 
-	public function logout()
+	public function logout(Request $request)
 	{
 		Auth::logout();
 	 
-		session()->invalidate();
+		$request->session()->invalidate();
+		$request->session()->flush();
 	 
 		return redirect('/login');
 	}

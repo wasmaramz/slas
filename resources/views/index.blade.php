@@ -11,10 +11,14 @@
 	<link rel="stylesheet" href="/node_modules/summernote/dist/summernote-bs4.css">
 
 	<!-- All Page CSS Files -->
-
-	<!-- Page Specific CSS Libraries -->
 	<link rel="stylesheet" href="/node_modules/owl.carousel/dist/assets/owl.carousel.min.css">
 	<link rel="stylesheet" href="/node_modules/owl.carousel/dist/assets/owl.theme.default.min.css">
+	<link rel="stylesheet" href="/node_modules/datatables.net-bs4/css/dataTables.bootstrap4.min.css">
+	<link rel="stylesheet" href="/node_modules/datatables.net-select-bs4/css/select.bootstrap4.min.css">
+	<link rel="stylesheet" href="/node_modules/select2/dist/css/select2.min.css">
+
+	<!-- Page Specific CSS Libraries -->
+
 @endsection
 
 @section ('body-content')
@@ -51,8 +55,12 @@
 	<script src="/node_modules/chocolat/dist/js/jquery.chocolat.min.js"></script>
 
 	<!-- All Page JS Files -->
-
-	<!-- Page Specific JS Libraries -->
 	<script src="/node_modules/jquery-sparkline/jquery.sparkline.min.js"></script>
 	<script src="/node_modules/owl.carousel/dist/owl.carousel.min.js"></script>
+	<script src="/node_modules/datatables/media/js/jquery.dataTables.min.js"></script>
+	<script src="/node_modules/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+	<script src="/node_modules/select2/dist/js/select2.full.min.js"></script>
+
+	<!-- Page Specific JS Libraries -->
+
 @endsection
