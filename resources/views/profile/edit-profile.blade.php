@@ -38,6 +38,12 @@
 								</div>
 							</div>
 						</div>
+						<div class="form-group row mb-2">
+							<label class="col-md-3 col-form-label font-weight-bold" for="ufname">Fullname <span class="text-danger">*</span></label>
+							<div class="col-md-7">
+								<input type="text" class="form-control" id="ufname" name="ufname" value="{{ $user->user_fullname }}">
+							</div>
+						</div>
 						<div class="form-group row mb-0">
 							<label class="col-md-3 col-form-label font-weight-bold" for="nophone">No. Phone</label>
 							<div class="col-md-3">
@@ -127,9 +133,15 @@
 		}
 
 		$('#EditProfileForm').validate({
-			rules:{
+			rules: {
+				ufname: {
+					required: true,
+				},
 			},
-			message:{
+			messages: {
+				ufname: {
+					required: "Please enter your Fullname.",
+				},
 			},
 			submitHandler: function(form){
 				$.ajax({
@@ -139,6 +151,7 @@
 					data: $(form).serialize(),
 					success: function(resp){
 						if (resp.success) {
+							$('#badge-sp_usr_fname').text(resp.sp_usr_fname);
 							$('.section').load('/edit/profile');
 						}
 					}

@@ -19,8 +19,8 @@ class DatabaseSeeder extends Seeder
 		\App\Models\Level::create(["level_id" => "PEAK", "level_name" => "PENOLONG AKADEMIK", "created_at" => now(), "updated_at" => now()]);
 		\App\Models\Level::create(["level_id" => "STUD", "level_name" => "PELAJAR", "created_at" => now(), "updated_at" => now()]);
 
-		\App\Models\User::create(["user_name" => "sapot", "password" => bcrypt("abc"), "level_id" => "SYST", "user_status" => "1", "user_email" => "support.slas@gmail.com", "user_nophone" => "", "created_by" => 1, "updated_by" => 1, "created_at" => now(), "updated_at" => now()]);
-		\App\Models\User::create(["user_name" => "admin", "password" => bcrypt("abc"), "level_id" => "ADMN", "user_status" => "1", "user_email" => "admin.slas@gmail.com", "user_nophone" => "", "created_by" => 1, "updated_by" => 1, "created_at" => now(), "updated_at" => now()]);
+		\App\Models\User::create(["user_fullname" => "Admin Sistem", "user_name" => "sapot", "password" => bcrypt("abc"), "level_id" => "SYST", "user_status" => "1", "user_email" => "support.slas@gmail.com", "user_nophone" => "", "created_by" => 1, "updated_by" => 1, "created_at" => now(), "updated_at" => now()]);
+		\App\Models\User::create(["user_fullname" => "Pentadbir 1", "user_name" => "admin", "password" => bcrypt("abc"), "level_id" => "ADMN", "user_status" => "1", "user_email" => "admin.slas@gmail.com", "user_nophone" => "", "created_by" => 1, "updated_by" => 1, "created_at" => now(), "updated_at" => now()]);
 
 		\App\Models\Program::create(["prog_code" => "TERA", "prog_name" => "Diploma Kejuruteraan Elektronik Bioperubatan (Terapeutik)", "created_at" => now(), "updated_at" => now()]);
 		\App\Models\Program::create(["prog_code" => "DIAGNOS", "prog_name" => "Diploma Kejuruteraan Elektronik Bioperubatan (Diagnostik)", "created_at" => now(), "updated_at" => now()]);

@@ -24,8 +24,8 @@
 			<li class="nav-item dropdown">
 				<a href="javascript:void(0)" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-users"></i> <span>Manage Users</span></a>
 				<ul class="dropdown-menu">
-					<li><a class="nav-link" href="javascript:void(0)" onclick="swal('Still In Development')">Staff</a></li>
-					<li><a class="nav-link" href="javascript:void(0)" onclick="swal('Still In Development')">Student</a></li>
+					<li><a class="nav-link" href="javascript:void(0)" onclick="$('.section').load('/manage/users/list/ADMN')">Staff</a></li>
+					<li><a class="nav-link" href="javascript:void(0)" onclick="$('.section').load('/manage/users/list/STUD')">Student</a></li>
 				</ul>
 			</li>
 

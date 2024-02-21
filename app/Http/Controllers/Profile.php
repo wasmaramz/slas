@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Student;
 use Exception;
 use Illuminate\Support\Facades\Hash;
+use Session;
 
 class Profile extends Controller
 {
@@ -25,7 +26,7 @@ class Profile extends Controller
 		else if (
 			!$check_user = DB::table('users as usr')
 				->selectRaw(
-					"usr.user_id, usr.user_name, usr.level_id, lvl.level_name, usr.user_email, usr.user_nophone, " . 
+					"usr.user_id, usr.user_fullname, usr.user_name, usr.level_id, lvl.level_name, usr.user_email, usr.user_nophone, " . 
 					"std.stud_id, std.stud_fullname, std.stud_nomat, std.stud_nokp, std.prog_id, prg.prog_name"
 				)
 				->join('levels as lvl', 'lvl.level_id', 'usr.level_id')
@@ -48,6 +49,11 @@ class Profile extends Controller
 
 	private function proc_edit_profile($request)
 	{
+		if (empty($request->ufname)){
+			return response()->json(["success" => false, "msg" => "Not enough information."]);
+		}
+
+		$user_fullname = $request->ufname;
 		$user_nophone = ($request->nophone) ? $request->nophone : null;
 		$sess_user_id = session('sess_user_id');
 
@@ -78,6 +84,7 @@ class Profile extends Controller
 
 		try {
 			$user_params = [
+				"user_fullname" => $user_fullname,
 				"user_nophone" => $user_nophone,
 				"updated_by" => $sess_user_id,
 			];
@@ -100,8 +107,12 @@ class Profile extends Controller
 			 */
 
 			DB::commit(); //commit those transaction ...
+
+			// update new sess_userfullname, sess_user_nophone
+			Session::put('sess_user_fullname', $user_fullname);
+			Session::put('sess_user_nophone', $user_nophone);
 			
-			return response()->json(["success" => true, "msg" => "Edit Profile Was Successful."]);
+			return response()->json(["success" => true, "msg" => "Edit Profile Was Successful.", "sp_usr_fname" => $user_fullname]);
 		}
 		catch (Exception $e){
 			return response()->json($e->getMessage());

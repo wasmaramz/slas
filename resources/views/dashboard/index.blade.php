@@ -17,7 +17,7 @@
 					</div>
 				</div>
 				<div class="card-body">
-					<h1>Welcome {{ session('sess_user_name') }}, as {{ session('sess_level_name') }}</h1>
+					<h1>Welcome {{ session('sess_user_fullname') }} ({{ session('sess_user_name') }}), as {{ session('sess_level_name') }}</h1>
 				</div>
 			</div>
 		</div>

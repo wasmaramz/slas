@@ -16,4 +16,10 @@ Route::middleware(App\Http\Middleware\IsAuthenticate::class)->group(function(){
 		Route::match(['get', 'post'], '/edit/profile', 'edit_profile');
 		Route::match(['get', 'post'], '/change/password', 'change_password');
 	});
+
+	Route::controller(App\Http\Controllers\Admin\ManageUser::class)->group(function(){
+		Route::get('/manage/users/list/{level}', 'index')->can('ADMN');
+		Route::get('/manage/user/info/{user_id}', 'info_user')->can('ADMN');
+		Route::match(['get', 'post'], '/manage/users/add/staff', 'add_staff');
+	});
 });
