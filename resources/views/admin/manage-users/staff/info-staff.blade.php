@@ -23,11 +23,18 @@
 	<div class="form-group row mb-2">
 		<div class="col-md-3 col-form-label font-weight-bold">Status</div>
 		<div class="col-md-9 col-form-label">
-			@if ($user->user_status == "1")
-				<span class="badge badge-success">Active</span>
-			@else 
-				<span class="badge badge-danger">Inactive</span>
-			@endif
+			@php
+				$user_status = $user->user_status;
+				if ($user_status == "ACTIVE")
+					$bdg_clss_color = "success";
+				else if ($user_status == "PENDING")
+					$bdg_clss_color = "info";
+				else if ($user_status == "INACTIVE")
+					$bdg_clss_color = "warning";
+				else 
+					$bdg_clss_color = "light";
+			@endphp
+			<span class="badge badge-{{ $bdg_clss_color }}">{{ $user_status }}</span>
 		</div>
 	</div>
 

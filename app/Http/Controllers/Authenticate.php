@@ -39,6 +39,11 @@ class Authenticate extends Controller
 		if (Auth::attempt($auth_cred)) {
 			$user = Auth::user();
 
+			if ($user->user_status <> "ACTIVE") {
+				Auth::logout();
+				return response()->json(["success" => false, "msg" => "Login failed, Your User ID Not Active."]);
+			}
+
 			if (! $level = DB::table('levels')->where('level_id', $user->level_id)->first()){
 				return response()->json(["success" => false, "msg" => "Record of level not found."]);
 			}

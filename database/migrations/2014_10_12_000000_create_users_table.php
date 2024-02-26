@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('user_name', 100)->unique();
             $table->string('password');
             $table->string('level_id', 10);
-            $table->enum('user_status', ["1", "2", "3"]); // 1: AKTIVE, 2: PENDING, 3: INACTIVE
+            $table->enum('user_status', ["ACTIVE", "PENDING", "INACTIVE"]);
             $table->string('user_email', 155)->nullable();
             $table->string('user_nophone', 50)->nullable();
             $table->integer('created_by')->unsigned();

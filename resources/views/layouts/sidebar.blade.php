@@ -19,7 +19,7 @@
 		</li>
 
 		@can ('ADMN')
-			<li class="menu-header">System Management</li>
+			<li class="menu-header">System</li>
 
 			<li class="nav-item dropdown">
 				<a href="javascript:void(0)" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-users"></i> <span>Manage Users</span></a>
