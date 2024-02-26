@@ -42,11 +42,18 @@
 												<td class="text-left">{{ $stud->user_fullname }}</td>
 												<td class="text-left">{{ $stud->level_name }}</td>
 												<td class="text-center">
-													@if ($stud->user_status == "1")
-														<span class="badge badge-success">Active</span>
-													@else
-														<span class="badge badge-danger">Inactive</span>
-													@endif
+													@php
+														$user_status = $stud->user_status;
+														if ($user_status == "ACTIVE")
+															$bdg_clss_color = "success";
+														else if ($user_status == "PENDING")
+															$bdg_clss_color = "info";
+														else if ($user_status == "INACTIVE")
+															$bdg_clss_color = "warning";
+														else 
+															$bdg_clss_color = "light";
+													@endphp
+													<span class="badge badge-{{ $bdg_clss_color }}">{{ $user_status }}</span>
 												</td>
 												<td class="text-center" style="whitespace:nowrap; vertical-align:middle;">
 													<button type="button" class="btn btn-icon text-primary" title="Edit Student" onclick="edit_stud('{{ $stud->user_id }')">

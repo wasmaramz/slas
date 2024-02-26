@@ -42,20 +42,30 @@
 												<td class="text-left">{{ $staff->user_fullname }}</td>
 												<td class="text-left">{{ $staff->level_name }}</td>
 												<td class="text-center">
-													@if ($staff->user_status == "1")
-														<span class="badge badge-success">Active</span>
-													@else
-														<span class="badge badge-danger">Inactive</span>
-													@endif
+													@php
+														$user_status = $staff->user_status;
+														if ($user_status == "ACTIVE")
+															$bdg_clss_color = "success";
+														else if ($user_status == "PENDING")
+															$bdg_clss_color = "info";
+														else if ($user_status == "INACTIVE")
+															$bdg_clss_color = "warning";
+														else 
+															$bdg_clss_color = "light";
+													@endphp
+													<span class="badge badge-{{ $bdg_clss_color }}">{{ $user_status }}</span>
 												</td>
 												<td class="text-center" style="whitespace:nowrap; vertical-align:middle;">
-													<button type="button" class="btn btn-icon text-primary" title="Edit Staff" onclick="edit_staff('{{ $staff->user_id }')">
+													<button type="button" class="btn btn-icon text-primary" title="Edit Staff" onclick="edit_staff('{{ $staff->user_id }}')">
 														<i class="fas fa-edit"></i>
 													</button>
-													<button type="button" class="btn btn-icon text-success" title="Change Password Staff" onclick="change_password('{{ $staff->user_id }')">
+													<button type="button" class="btn btn-icon text-success" title="Change Password Staff" onclick="change_password('{{ $staff->user_id }}')">
 														<i class="fas fa-key"></i>
 													</button>
-													<button type="button" class="btn btn-icon text-danger" title="Delete Staff" onclick="delete_staff('{{ $staff->user_id }')">
+													<button type="button" class="btn btn-icon text-info" title="Send Email Notify Staff" onclick="send_notify_staff('{{ $staff->user_id }}')">
+														<i class="fas fa-paper-plane"></i>
+													</button>
+													<button type="button" class="btn btn-icon text-danger" title="Delete Staff" onclick="delete_staff('{{ $staff->user_id }}')">
 														<i class="fas fa-trash"></i>
 													</button>
 												</td>
@@ -132,7 +142,7 @@
 		}
 
 		function add_staff(){
-			$.get('/manage/users/add/staff', function(resp){
+			$.get('/manage/user/add/staff', function(resp){
 				if (resp.success) {
 					var ori_card_header = $('#card_manage_staff .card-header').html();
 					var close_btn = $(
@@ -160,15 +170,92 @@
 		}
 
 		function edit_staff(usid){
-			swal('Alert!', 'Edit User Function Under Construction!', 'info');
+			$.get(`/manage/user/edit/staff/${usid}`, function(resp){
+				if (resp.success){
+					var ori_card_header = $('#card_manage_staff .card-header').html();
+					var close_btn = $(
+						'<buttton type="butiton" class="btn btn-icon btn-danger" title="Close">' + 
+							'<i class="fas fa-times"></i>' + 
+						'</button>'
+					);
+					$(close_btn).on('click', function(e){
+						$('#card_manage_staff .card-header').empty().html(ori_card_header);
+						$('#card_manage_staff #content-top').slideUp();
+						$('#card_manage_staff #content-bottom').slideDown();
+					});
+					$('#card_manage_staff .card-header')
+						.empty()
+						.append('<h4>Edit Staff</h4>')
+						.append($('<div class="card-header-action"></div>').append(close_btn));
+					$('#card_manage_staff #content-top').empty().html(resp.view_temp);
+					$('#card_manage_staff #content-top').slideDown();
+					$('#card_manage_staff #content-bottom').slideUp();
+				}
+				else{
+					pop_swal('warning', resp.msg);
+				}
+			});
 		}
 
 		function change_password(usid){
-			swal('Alert!', 'Change Password Function Under Construction!', 'info');
+			$.get(`/manage/user/change/password/${usid}`, function(resp){
+				if (resp.success){
+					var ori_card_header = $('#card_manage_staff .card-header').html();
+					var close_btn = $(
+						'<buttton type="butiton" class="btn btn-icon btn-danger" title="Close">' + 
+							'<i class="fas fa-times"></i>' + 
+						'</button>'
+					);
+					$(close_btn).on('click', function(e){
+						$('#card_manage_staff .card-header').empty().html(ori_card_header);
+						$('#card_manage_staff #content-top').slideUp();
+						$('#card_manage_staff #content-bottom').slideDown();
+					});
+					$('#card_manage_staff .card-header')
+						.empty()
+						.append('<h4>Change Password User</h4>')
+						.append($('<div class="card-header-action"></div>').append(close_btn));
+					$('#card_manage_staff #content-top').empty().html(resp.view_temp);
+					$('#card_manage_staff #content-top').slideDown();
+					$('#card_manage_staff #content-bottom').slideUp();
+				}
+				else{
+					pop_swal('warning', resp.msg);
+				}
+			});
+		}
+
+		function send_notify_staff(usid){
+			swal('Alert!', 'Send Email Notify Staff Function Under Construction!', 'info');
 		}
 
 		function delete_staff(usid){
-			swal('Alert!', 'Delete User Function Under Construction!', 'info');
+			// confirmation dialog
+			swal({
+				title: 'Delete User!',
+				text: 'Are you sure you want to delete this user record?',
+				icon: 'warning',
+				buttons: true,
+				dangerMode: true,
+			})
+			.then((willLogout) => {
+				if (willLogout) {
+					$.ajax({
+						url: "/manage/user/delete",
+						type: "post",
+						dataType: "json",
+						data: {
+							"_token": "{{ csrf_token() }}",
+							"usrid": usid,
+						},
+						success: function(resp){
+							if (resp.success){
+								$('.section').load('/manage/users/list/ADMN')
+							}
+						}
+					});
+				}
+			});
 		}
 	</script>
 	<!-- END: Javascript -->
