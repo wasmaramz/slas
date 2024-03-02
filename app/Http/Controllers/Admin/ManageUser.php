@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use App\Models\Student;
 
 class ManageUser extends Controller
 {
@@ -78,7 +79,7 @@ class ManageUser extends Controller
 	public function add_staff (Request $request) 
 	{
 		if ($request->isMethod('post')){
-			return $this->process_add_staff($request);
+			return $this->proc_add_staff($request);
 		}
 
 		if (! $levels = DB::table('levels')->whereNotIn('level_id', ["SYS", "STUD"])->get()){
@@ -91,13 +92,13 @@ class ManageUser extends Controller
 	}
 
 
-	private function process_add_staff($request)
+	private function proc_add_staff($request)
 	{
 		if (
 			empty($request->ufname) OR empty($request->lvlid) OR 
 			empty($request->usrname) OR empty($request->upsswd) OR empty($request->ucnfpsswd)
 		){
-			return response()->json(["success" => false, "msg" => "Not Enpugh Information."]);
+			return response()->json(["success" => false, "msg" => "Not Enough Information."]);
 		}
 
 		$user_fullname = strtoupper($request->ufname);
@@ -105,14 +106,28 @@ class ManageUser extends Controller
 		$user_email = (!empty($request->uemail)) ? $request->uemail : null;
 		$user_nophone = (!empty($request->unophone)) ? $request->unophone : null;
 
-		// check format email if not empty
-		if ($user_email AND !filter_var($user_email, FILTER_VALIDATE_EMAIL)){
-			return response()->json(["success" => false, "msg" => "Please enter a valid format of Email.", "target_reset" => "#uemail"]);
+		// check user email 
+		if ($user_email) {
+			// check format email if not empty
+			if (!filter_var($user_email, FILTER_VALIDATE_EMAIL)){
+				return response()->json(["success" => false, "msg" => "Please enter a valid format of Email.", "target_reset" => "#uemail"]);
+			}
+			// check user_email available or not
+			if ( $check_uemail = DB::table('users')->where("user_email", $user_email)->first()){
+				return response()->json(["success" => false, "msg" => "That Email already Exist.", "target_reset" => "#uemail"]);
+			}
 		}
 
-		// check format nophone if not empty
-		if ($user_nophone AND !is_numeric($user_nophone)){
-			return response()->json(["success" => false, "msg" => "Please enter a valid format of No. Phone.", "target_reset" => "#unophone"]);
+		// check user_nophone 
+		if ($user_nophone) {
+			// check format nophone if not empty
+			if (!is_numeric($user_nophone)){
+				return response()->json(["success" => false, "msg" => "Please enter a valid format of No. Phone.", "target_reset" => "#unophone"]);
+			}
+			// check user_nophone available or not
+			if ( $check_uemail = DB::table('users')->where("user_email", $user_email)->first()){
+				return response()->json(["success" => false, "msg" => "That No. Phone already Exist.", "target_reset" => "#unophone"]);
+			}
 		}
 
 		$user_name = $request->usrname;
@@ -198,9 +213,12 @@ class ManageUser extends Controller
 			return response()->json(["success" => false, "msg" => "Level Record Not Found."]);
 		}
 
+		$user_statuses = DB::table('user_statuses')->get();
+
 		$view_params = [
 			"staff" => $check_user,
 			"levels" => $levels,
+			"user_statuses" => $user_statuses,
 		];
 
 		$view_temp = view('admin.manage-users.staff.detail-staff', $view_params)->render();
@@ -226,14 +244,28 @@ class ManageUser extends Controller
 		$user_email = (!empty($request->uemail)) ? $request->uemail : null;
 		$user_nophone = (!empty($request->unophone)) ? $request->unophone : null;
 
-		// check format email if not empty
-		if ($user_email AND !filter_var($user_email, FILTER_VALIDATE_EMAIL)){
-			return response()->json(["success" => false, "msg" => "Please enter a valid format of Email.", "target_reset" => "#uemail"]);
+		// check user_email
+		if ($user_email) {
+			// check format email if not empty
+			if (!filter_var($user_email, FILTER_VALIDATE_EMAIL)){
+				return response()->json(["success" => false, "msg" => "Please enter a valid format of Email.", "target_reset" => "#uemail"]);
+			}
+			// check user_email available or not
+			if ( $check_uemail = DB::table('users')->whereRaw("user_id <> $user_id AND user_email = '$user_email'")->first()){
+				return response()->json(["success" => false, "msg" => "That Email already Exist.", "target_reset" => "#uemail"]);
+			}
 		}
 
-		// check format nophone if not empty
-		if ($user_nophone AND !is_numeric($user_nophone)){
-			return response()->json(["success" => false, "msg" => "Please enter a valid format of No. Phone.", "target_reset" => "#unophone"]);
+		// check user_nophone
+		if ($user_nophone) {
+			// check format nophone if not empty
+			if (!is_numeric($user_nophone)){
+				return response()->json(["success" => false, "msg" => "Please enter a valid format of No. Phone.", "target_reset" => "#unophone"]);
+			}
+			// check user_nophone available or not
+			if ( $check_uemail = DB::table('users')->whereRaw("user_id <> $user_id AND user_email = '$user_email'")->first()){
+				return response()->json(["success" => false, "msg" => "That No. Phone already Exist.", "target_reset" => "#unophone"]);
+			}
 		}
 
 		$level_id = $request->lvlid;
@@ -265,6 +297,288 @@ class ManageUser extends Controller
 			DB::commit();
 
 			return response()->json(["success" => true, "msg" => "Edit User Successed."]);
+		}
+		catch (Exception $e) {
+			return response()->json($e->getMessage());
+		}
+	}
+
+
+	public function add_stud (Request $request) 
+	{
+		if ($request->isMethod('post')){
+			return $this->proc_add_stud($request);
+		}
+
+		$programs = DB::table('programs')->get();
+
+		$view_params = [
+			"programs" => $programs,
+		];
+
+		$view_temp = view('admin.manage-users.student.detail-stud', $view_params)->render();
+
+		return response()->json(["success" => true, "msg" => "...", "view_temp" => $view_temp]);
+	}	
+
+
+	private function proc_add_stud($request)
+	{
+		if (
+			empty($request->ufname) OR empty($request->snomat) OR empty($request->snokp) OR empty($request->prgid) OR 
+			empty($request->usrname) OR empty($request->upsswd) OR empty($request->ucnfpsswd)
+		){
+			return response()->json(["success" => false, "msg" => "Not Enough Information."]);
+		}
+
+		$user_fullname = strtoupper($request->ufname);
+		$stud_nomat = preg_replace("/[^0-9A-Za-z]/", "", $request->snomat);
+		$stud_nokp = preg_replace("/[^0-9]/", "", $request->snokp);
+		$prog_id = $request->prgid;
+		$user_email = (!empty($request->uemail)) ? $request->uemail : null;
+		$user_nophone = (!empty($request->unophone)) ? $request->unophone : null;
+
+		// check no. matric
+		if ($check_nomat = DB::table('students')->where('stud_nomat', $stud_nomat)->first()){
+			return response()->json(["success" => false, "msg" => "That No. Matric already exist.", "target_reset" => "#snomat"]);
+		}
+
+		// check no. mykad
+		if ($check_nokp = DB::table('students')->where('stud_nokp', $stud_nokp)->first()){
+			return response()->json(["success" => false, "msg" => "That No. MyKad already exist.", "target_reset" => "#snokp"]);
+		}
+
+		// check user email 
+		if ($user_email) {
+			// check format email if not empty
+			if (!filter_var($user_email, FILTER_VALIDATE_EMAIL)){
+				return response()->json(["success" => false, "msg" => "Please enter a valid format of Email.", "target_reset" => "#uemail"]);
+			}
+			// check user_email available or not
+			if ( $check_uemail = DB::table('users')->where("user_email", $user_email)->first()){
+				return response()->json(["success" => false, "msg" => "That Email already Exist.", "target_reset" => "#uemail"]);
+			}
+		}
+
+		// check user_nophone 
+		if ($user_nophone) {
+			// check format nophone if not empty
+			if (!is_numeric($user_nophone)){
+				return response()->json(["success" => false, "msg" => "Please enter a valid format of No. Phone.", "target_reset" => "#unophone"]);
+			}
+			// check user_nophone available or not
+			if ( $check_uemail = DB::table('users')->where("user_email", $user_email)->first()){
+				return response()->json(["success" => false, "msg" => "That No. Phone already Exist.", "target_reset" => "#unophone"]);
+			}
+		}
+
+		$user_name = $request->usrname;
+
+		// check format user name 
+		if (preg_match("/[^a-z\-A-Z\-0-9]/i", $user_name)){
+			return response()->json(["success" => false, "msg" => "Please enter a valid format of User ID.", "target_reset" => "#usrname"]);
+		}
+
+		// check whether user_name available or not 
+		if ($check_usrname = DB::table('users')->where('user_name', $user_name)->first()){
+			return response()->json(["success" => false, "msg" => "That User ID already exist.", "target_reset" => "#usrname"]);
+		}
+
+		$password = $request->upsswd;
+		$conf_password = $request->ucnfpsswd;
+
+		// check length password up to 8 char 
+		/*
+		if (strlen($password) < 8) {
+			return response()->json(["success" => false, "msg" => "Password must be at least 8 characters.", "target_reset" => "#upsswd, #ucnfpsswd"]);
+		}
+		 */
+
+		// check confirmation of password
+		if ($conf_password <> $password){
+			return response()->json(["success" => false, "msg" => "Confirm Password Is Not Match.", "target_reset" => "#upsswd, #ucnfpsswd"]);
+		}
+
+		// hashed password
+		$hash_password = Hash::make($password);
+
+		$sess_user_id = session('sess_user_id');
+
+		DB::beginTransaction();
+
+		try {
+			$param_user_stud = [
+				"user_fullname" => $user_fullname, 
+				"user_name" => $user_name,
+				"password" => $hash_password,
+				"level_id" => "STUD",
+				"user_status" => "PENDING",
+				"user_email" => $user_email,
+				"user_nophone" => $user_nophone,
+				"created_by" => $sess_user_id,
+				"updated_by" => $sess_user_id,
+			];
+
+			if (! $add_user_stud = User::create($param_user_stud)){
+				DB::rollBack();
+				return response()->json(["success" => false, "msg" => "Add User Student Failed."]);
+			}
+
+			$stud_user_id = $add_user_stud->user_id;
+
+			$param_stud = [
+				'user_id' => $stud_user_id,
+				'stud_fullname' => $user_fullname,
+				'stud_nomat' => $stud_nomat,
+				'stud_nokp' => $stud_nokp,
+				'prog_id' => $prog_id,
+				"created_by" => $sess_user_id,
+				"updated_by" => $sess_user_id,
+			];
+
+			if (! $add_stud = Student::create($param_stud)){
+				DB::rollBack();
+				return response()->json(["success" => false, "msg" => "Add Student Failed."]);
+			}
+
+			DB::commit();
+
+			return response()->json(["success" => true, "msg" => "Add Student Successful."]);
+		}
+		catch (Exception $e) {
+			return response()->json($e->getMessage());
+		}
+	}
+
+
+	public function edit_stud (Request $request) 
+	{
+		if ($request->isMethod('post')){
+			return $this->proc_edit_stud($request);
+		}
+
+		if (empty($request->user_id)){
+			return response()->json(["success" => false, "msg" => "Not Enough Information."]);
+		}
+
+		$user_id = $request->user_id;
+
+		if (
+			! $check_stud = DB::table('users as usr')
+					->selectRaw("usr.*, stu.*, usr.user_id")
+					->join('students as stu', 'stu.user_id', 'usr.user_id')
+					->where('usr.user_id', $user_id)
+					->first()
+		){
+			return response()->json(["success" => false, "msg" => "User Record Not Found."]);
+		}
+
+		$programs = DB::table('programs')->get();
+
+		$user_statuses = DB::table('user_statuses')->get();
+
+		$view_params = [
+			'stud' => $check_stud,
+			'programs' => $programs,
+			'user_statuses' => $user_statuses,
+		];
+
+		$view_temp = view('admin.manage-users.student.detail-stud', $view_params)->render();
+
+		return response()->json(["success" => true, "msg" => "...", "view_temp" => $view_temp]);
+	}	
+
+
+	private function proc_edit_stud($request)
+	{
+		if (
+			empty($request->usrid) OR empty($request->ufname) OR empty($request->snomat) OR empty($request->snokp) OR empty($request->prgid) OR empty($request->ustatus) 
+		){
+			return response()->json(["success" => false, "msg" => "Not Enough Information."]);
+		}
+
+		$user_id = $request->usrid;
+		$user_fullname = strtoupper($request->ufname);
+		$stud_nomat = preg_replace("/[^0-9A-Za-z]/", "", $request->snomat);
+		$stud_nokp = preg_replace("/[^0-9]/", "", $request->snokp);
+		$prog_id = $request->prgid;
+		$user_email = (!empty($request->uemail)) ? $request->uemail : null;
+		$user_nophone = (!empty($request->unophone)) ? $request->unophone : null;
+		$user_status = $request->ustatus;
+
+		// check user
+		if (! $check_user = DB::table('users')->where('user_id', $user_id)->first()){
+			return response()->json(["success" => false, "msg" => "User Record Not Found."]);
+		}
+
+		// check no. matric
+		if ($check_nomat = DB::table('students')->whereRaw("user_id <> $user_id AND stud_nomat = '$stud_nomat'")->first()){
+			return response()->json(["success" => false, "msg" => "That No. Matric already exist.", "target_reset" => "#snomat"]);
+		}
+
+		// check no. mykad
+		if ($check_nokp = DB::table('students')->whereRaw("user_id <> $user_id AND stud_nokp = '$stud_nokp'")->first()){
+			return response()->json(["success" => false, "msg" => "That No. MyKad already exist.", "target_reset" => "#snokp"]);
+		}
+
+		// check user_email
+		if ($user_email) {
+			// check format email if not empty
+			if (!filter_var($user_email, FILTER_VALIDATE_EMAIL)){
+				return response()->json(["success" => false, "msg" => "Please enter a valid format of Email.", "target_reset" => "#uemail"]);
+			}
+			// check user_email available or not
+			if ( $check_uemail = DB::table('users')->whereRaw("user_id <> $user_id AND user_email = '$user_email'")->first()){
+				return response()->json(["success" => false, "msg" => "That Email already Exist.", "target_reset" => "#uemail"]);
+			}
+		}
+
+		// check user_nophone
+		if ($user_nophone) {
+			// check format nophone if not empty
+			if (!is_numeric($user_nophone)){
+				return response()->json(["success" => false, "msg" => "Please enter a valid format of No. Phone.", "target_reset" => "#unophone"]);
+			}
+			// check user_nophone available or not
+			if ( $check_uemail = DB::table('users')->whereRaw("user_id <> $user_id AND user_email = '$user_email'")->first()){
+				return response()->json(["success" => false, "msg" => "That No. Phone already Exist.", "target_reset" => "#unophone"]);
+			}
+		}
+
+		$sess_user_id = session('sess_user_id');
+
+		DB::beginTransaction();
+
+		try {
+			$param_user_stud = [
+				"user_fullname" => $user_fullname, 
+				"user_status" => $user_status,
+				"user_email" => $user_email,
+				"user_nophone" => $user_nophone,
+				"updated_by" => $sess_user_id,
+			];
+
+			if (! $edit_user_stud = User::where('user_id', $user_id)->update($param_user_stud)){
+				DB::rollBack();
+				return response()->json(["success" => false, "msg" => "Edit User Student Failed."]);
+			}
+
+			$param_stud = [
+				'stud_fullname' => $user_fullname,
+				'stud_nomat' => $stud_nomat,
+				'stud_nokp' => $stud_nokp,
+				'prog_id' => $prog_id,
+				"updated_by" => $sess_user_id,
+			];
+
+			if (! $edit_stud = Student::where('user_id', $user_id)->update($param_stud)){
+				DB::rollBack();
+				return response()->json(["success" => false, "msg" => "Edit Student Failed."]);
+			}
+
+			DB::commit();
+
+			return response()->json(["success" => true, "msg" => "Edit Student Successful."]);
 		}
 		catch (Exception $e) {
 			return response()->json($e->getMessage());

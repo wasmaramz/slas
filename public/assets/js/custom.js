@@ -54,7 +54,7 @@ $.validator.addMethod("regex", function(value, element, regexp){
 // standardize response swal message ...
 function pop_swal(icon, message){
 	if (icon == 'success') {
-		swal('Success!', message, 'success');
+		swal('Success!', message, 'success', {buttons: false, timer: 1000});
 	}
 	else if (icon == 'warning') {
 		swal('Failed!', message, 'warning');

@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('students', function (Blueprint $table) {
             $table->increments('stud_id');
             $table->integer('user_id')->unsigned();
-            $table->string('stud_fullname');
-            $table->string('stud_nomat', 50);
+            $table->string('stud_fullname')->nullable();
+            $table->string('stud_nomat', 50)->nullable();
             $table->string('stud_nokp', 50)->nullable();
-            $table->integer('prog_id')->unsigned();
+            $table->integer('prog_id')->unsigned()->nullable();
             $table->integer('created_by')->unsigned();
             $table->integer('updated_by')->unsigned();
             $table->timestamps();

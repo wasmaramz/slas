@@ -39,9 +39,17 @@ class Authenticate extends Controller
 		if (Auth::attempt($auth_cred)) {
 			$user = Auth::user();
 
-			if ($user->user_status <> "ACTIVE") {
+			if ($user->user_status == "INACTIVE") {
 				Auth::logout();
-				return response()->json(["success" => false, "msg" => "Login failed, Your User ID Not Active."]);
+				return response()->json(["success" => false, "msg" => "Login failed, Your accout has been disabled. Please contact the administrator for more informations."]);
+			}
+
+			if ($user->user_status == "PENDING") {
+				Auth::logout();
+				/* STILL IN DEVELOPMENT (MAYBE FOR 2ND PHASE)
+					return response()->json(["success" => false, "msg" => "Login failed, Your need to verify your Email Address first.", "go_verify_email" => true]);
+				 */
+				return response()->json(["success" => false, "msg" => "Login failed, Your User Activation Still In Progress."]);
 			}
 
 			if (! $level = DB::table('levels')->where('level_id', $user->level_id)->first()){
