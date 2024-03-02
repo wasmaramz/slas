@@ -7,7 +7,7 @@
 		<div class="col-lg-12 col-md-12 col-sm-12">
 			
 			<!-- START: .card .shadow -->
-			<div class="card shadow">
+			<div class="card shadow" id="card_manage_stud">
 				<div class="card-header">
 					<h4>Manage Student</h4>
 					<div class="card-header-action">
@@ -20,9 +20,9 @@
 				<!-- START: .card-body -->
 				<div class="card-body">
 
-					<div class="content-top" style="display:none;"></div>
+					<div id="content-top" style="display:none;"></div>
 
-					<div class="content-bottom">
+					<div id="content-bottom">
 						<div class="table-responsive">
 							<table class="table table-bordered" id="ListStudTable">	
 								<thead>
@@ -56,13 +56,16 @@
 													<span class="badge badge-{{ $bdg_clss_color }}">{{ $user_status }}</span>
 												</td>
 												<td class="text-center" style="whitespace:nowrap; vertical-align:middle;">
-													<button type="button" class="btn btn-icon text-primary" title="Edit Student" onclick="edit_stud('{{ $stud->user_id }')">
+													<button type="button" class="btn btn-icon text-primary" title="Edit Student" onclick="edit_stud('{{ $stud->user_id }}')">
 														<i class="fas fa-edit"></i>
 													</button>
-													<button type="button" class="btn btn-icon text-success" title="Change Password Student" onclick="change_password('{{ $stud->user_id }')">
+													<button type="button" class="btn btn-icon text-success" title="Change Password Student" onclick="change_password('{{ $stud->user_id }}')">
 														<i class="fas fa-key"></i>
 													</button>
-													<button type="button" class="btn btn-icon text-danger" title="Delete Student" onclick="delete_stud('{{ $stud->user_id }')">
+													<button type="button" class="btn btn-icon text-info" title="Send Email Notify Student" onclick="send_notify_stud('{{ $stud->user_id }}')">
+														<i class="fas fa-paper-plane"></i>
+													</button>
+													<button type="button" class="btn btn-icon text-danger" title="Delete Student" onclick="delete_stud('{{ $stud->user_id }}')">
 														<i class="fas fa-trash"></i>
 													</button>
 												</td>
@@ -112,23 +115,150 @@
 		});
 
 		function info_stud(usid){
-			swal('Alert!', 'Info Student Function Under Construction!', 'info');
+			$.get(`/manage/user/info/${usid}`, function (resp){
+				if (resp.success){
+					var modal_title = '<i class="fas fa-info-circle"></i> Info Student';
+					$('#modal_info_stud').remove();
+					$('body').append(
+						'<div class="modal fade" tabindex="-1" role="dialog" id="modal_info_stud">' +
+							'<div class="modal-dialog modal-xl" role="document">' + 
+								'<div class="modal-content">' + 
+									'<div class="modal-header">' + 
+										'<h5 class="modal-title">' + modal_title + '</h5>' +
+										'<button type="button" class="close" data-dismiss="modal" aria-label="Close"><i class="fas fa-times"></i></button>' +
+									'</div>' + 
+									'<div class="modal-body"></div>' + 
+								'</div>' + 
+							'</div>' + 
+						'</div>'
+					);
+					$('#modal_info_stud').find('.modal-body').empty().append(resp.view_temp);
+					$('#modal_info_stud').modal('toggle')
+				}
+				else {
+					pop_swal('warning', resp.msg);
+				}
+			});
 		}
 
 		function add_stud(usid){
-			swal('Alert!', 'Add Student Function Under Construction!', 'info');
+			$.get('/manage/user/add/stud', function(resp){
+				if (resp.success) {
+					var ori_card_header = $('#card_manage_stud .card-header').html();
+					var close_btn = $(
+						'<buttton type="butiton" class="btn btn-icon btn-danger" title="Close">' + 
+							'<i class="fas fa-times"></i>' + 
+						'</button>'
+					);
+					$(close_btn).on('click', function(e){
+						$('#card_manage_stud .card-header').empty().html(ori_card_header);
+						$('#card_manage_stud #content-top').slideUp();
+						$('#card_manage_stud #content-bottom').slideDown();
+						$('.section').load('/manage/users/list/STUD');
+					});
+					$('#card_manage_stud .card-header')
+						.empty()
+						.append('<h4>Add Student</h4>')
+						.append($('<div class="card-header-action"></div>').append(close_btn));
+					$('#card_manage_stud #content-top').empty().html(resp.view_temp);
+					$('#card_manage_stud #content-top').slideDown();
+					$('#card_manage_stud #content-bottom').slideUp();
+				}
+				else {
+					pop_swal('warning', resp.msg);
+				}
+			});
 		}
 
 		function edit_stud(usid){
-			swal('Alert!', 'Edit Student Function Under Construction!', 'info');
+			$.get(`/manage/user/edit/stud/${usid}`, function(resp){
+				if (resp.success){
+					var ori_card_header = $('#card_manage_stud .card-header').html();
+					var close_btn = $(
+						'<buttton type="butiton" class="btn btn-icon btn-danger" title="Close">' + 
+							'<i class="fas fa-times"></i>' + 
+						'</button>'
+					);
+					$(close_btn).on('click', function(e){
+						$('#card_manage_stud .card-header').empty().html(ori_card_header);
+						$('#card_manage_stud #content-top').slideUp();
+						$('#card_manage_stud #content-bottom').slideDown();
+						$('.section').load('/manage/users/list/STUD');
+					});
+					$('#card_manage_stud .card-header')
+						.empty()
+						.append('<h4>Edit Student</h4>')
+						.append($('<div class="card-header-action"></div>').append(close_btn));
+					$('#card_manage_stud #content-top').empty().html(resp.view_temp);
+					$('#card_manage_stud #content-top').slideDown();
+					$('#card_manage_stud #content-bottom').slideUp();
+				}
+				else{
+					pop_swal('warning', resp.msg);
+				}
+			});
 		}
 
 		function change_password(usid){
-			swal('Alert!', 'Change Password Function Under Construction!', 'info');
+			$.get(`/manage/user/change/password/${usid}`, function(resp){
+				if (resp.success){
+					var ori_card_header = $('#card_manage_stud .card-header').html();
+					var close_btn = $(
+						'<buttton type="butiton" class="btn btn-icon btn-danger" title="Close">' + 
+							'<i class="fas fa-times"></i>' + 
+						'</button>'
+					);
+					$(close_btn).on('click', function(e){
+						$('#card_manage_stud .card-header').empty().html(ori_card_header);
+						$('#card_manage_stud #content-top').slideUp();
+						$('#card_manage_stud #content-bottom').slideDown();
+						$('.section').load('/manage/users/list/STUD');
+					});
+					$('#card_manage_stud .card-header')
+						.empty()
+						.append('<h4>Change Password User</h4>')
+						.append($('<div class="card-header-action"></div>').append(close_btn));
+					$('#card_manage_stud #content-top').empty().html(resp.view_temp);
+					$('#card_manage_stud #content-top').slideDown();
+					$('#card_manage_stud #content-bottom').slideUp();
+				}
+				else{
+					pop_swal('warning', resp.msg);
+				}
+			});
+		}
+
+		function send_notify_stud(usid){
+			swal('Alert!', 'Send Email Notify Student Function Under Construction!', 'info');
 		}
 
 		function delete_stud(usid){
-			swal('Alert!', 'Delete Student Function Under Construction!', 'info');
+			// confirmation dialog
+			swal({
+				title: 'Delete User!',
+				text: 'Are you sure you want to delete this user record?',
+				icon: 'warning',
+				buttons: true,
+				dangerMode: true,
+			})
+			.then((willLogout) => {
+				if (willLogout) {
+					$.ajax({
+						url: "/manage/user/delete",
+						type: "post",
+						dataType: "json",
+						data: {
+							"_token": "{{ csrf_token() }}",
+							"usrid": usid,
+						},
+						success: function(resp){
+							if (resp.success){
+								$('.section').load('/manage/users/list/STUD')
+							}
+						}
+					});
+				}
+			});
 		}
 	</script>
 	<!-- END: Javascript -->

@@ -63,10 +63,8 @@
 		@endcan
 
 		@can ('STUD')
-			<li class="menu-header">Leave Application</li>
-
 			<li>
-				<a href="javascript:void(0)" class="nav-link" onclick="swal('Still In Development')"><i class="fas fa-list"></i><span>Manage Application</span></a>
+				<a href="javascript:void(0)" class="nav-link" onclick="swal('Still In Development')"><i class="fas fa-list"></i><span>Leave Application</span></a>
 			</li>
 		@endcan
 

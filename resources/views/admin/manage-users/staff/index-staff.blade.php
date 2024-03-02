@@ -117,10 +117,10 @@
 		function info_staff(usid) {
 			$.get(`/manage/user/info/${usid}`, function (resp){
 				if (resp.success){
-					var modal_title = '<i class="fas fa-info-circle"></i> Info User';
-					$('#modal_info_user').remove();
+					var modal_title = '<i class="fas fa-info-circle"></i> Info Staff';
+					$('#modal_info_staff').remove();
 					$('body').append(
-						'<div class="modal fade" tabindex="-1" role="dialog" id="modal_info_user">' +
+						'<div class="modal fade" tabindex="-1" role="dialog" id="modal_info_staff">' +
 							'<div class="modal-dialog modal-xl" role="document">' + 
 								'<div class="modal-content">' + 
 									'<div class="modal-header">' + 
@@ -132,8 +132,8 @@
 							'</div>' + 
 						'</div>'
 					);
-					$('#modal_info_user').find('.modal-body').empty().append(resp.view_temp);
-					$('#modal_info_user').modal('toggle')
+					$('#modal_info_staff').find('.modal-body').empty().append(resp.view_temp);
+					$('#modal_info_staff').modal('toggle')
 				}
 				else {
 					pop_swal('warning', resp.msg);
@@ -154,6 +154,7 @@
 						$('#card_manage_staff .card-header').empty().html(ori_card_header);
 						$('#card_manage_staff #content-top').slideUp();
 						$('#card_manage_staff #content-bottom').slideDown();
+						$('.section').load('/manage/users/list/ADMN');
 					});
 					$('#card_manage_staff .card-header')
 						.empty()
@@ -182,6 +183,7 @@
 						$('#card_manage_staff .card-header').empty().html(ori_card_header);
 						$('#card_manage_staff #content-top').slideUp();
 						$('#card_manage_staff #content-bottom').slideDown();
+						$('.section').load('/manage/users/list/ADMN');
 					});
 					$('#card_manage_staff .card-header')
 						.empty()
@@ -210,6 +212,7 @@
 						$('#card_manage_staff .card-header').empty().html(ori_card_header);
 						$('#card_manage_staff #content-top').slideUp();
 						$('#card_manage_staff #content-bottom').slideDown();
+						$('.section').load('/manage/users/list/ADMN');
 					});
 					$('#card_manage_staff .card-header')
 						.empty()

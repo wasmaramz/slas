@@ -19,6 +19,10 @@ class DatabaseSeeder extends Seeder
 		\App\Models\Level::create(["level_id" => "PEAK", "level_name" => "PENOLONG AKADEMIK", "created_at" => now(), "updated_at" => now()]);
 		\App\Models\Level::create(["level_id" => "STUD", "level_name" => "PELAJAR", "created_at" => now(), "updated_at" => now()]);
 
+		\App\Models\UserStatus::create(["ustat_id" => "ACTIVE", "ustat_name" => "Active"]);
+		\App\Models\UserStatus::create(["ustat_id" => "PENDING", "ustat_name" => "Pending"]);
+		\App\Models\UserStatus::create(["ustat_id" => "INACTIVE", "ustat_name" => "Inactive"]);
+
 		\App\Models\User::create(["user_fullname" => "ADMIN SISTEM", "user_name" => "sapot", "password" => bcrypt("abc"), "level_id" => "SYST", "user_status" => "ACTIVE", "user_email" => "support.slas@gmail.com", "user_nophone" => "", "created_by" => 1, "updated_by" => 1, "created_at" => now(), "updated_at" => now()]);
 		\App\Models\User::create(["user_fullname" => "PENTADBIR 1", "user_name" => "admin", "password" => bcrypt("abc"), "level_id" => "ADMN", "user_status" => "ACTIVE", "user_email" => "admin.slas@gmail.com", "user_nophone" => "", "created_by" => 1, "updated_by" => 1, "created_at" => now(), "updated_at" => now()]);
 

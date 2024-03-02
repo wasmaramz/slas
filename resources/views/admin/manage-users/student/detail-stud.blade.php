@@ -1,34 +1,37 @@
 @php
-	$contr_func = Route::currentRouteAction();
+	$contr_func = Route::currentRouteAction(); 
 	$contr_func = explode("@", $contr_func)[1];
-	$contr_func = str_replace("_staff", "", $contr_func);
+	$contr_func = str_replace("_stud", "", $contr_func);
 
-	if ($contr_func == "edit" AND $staff) {
-		$user_id = $staff->user_id;
-		$user_fullname = $staff->user_fullname;
-		$level_id = $staff->level_id;
-		$user_email = $staff->user_email;
-		$user_nophone = $staff->user_nophone;
-		$user_name = $staff->user_name;
-		$user_status = $staff->user_status; 
+	if ($contr_func == "edit" AND !empty($stud)) {
+		$user_id = $stud->user_id;
+		$stud_id = $stud->stud_id;
+		$user_fullname = $stud->user_fullname;
+		$stud_nomat = $stud->stud_nomat;
+		$stud_nokp = $stud->stud_nokp;
+		$prog_id = $stud->prog_id;
+		$user_email = $stud->user_email;
+		$user_nophone = $stud->user_nophone;
+		$user_status = $stud->user_status;
 	}
 	else {
-		$user_id = null;
 		$user_fullname = null;
-		$level_id = null;
+		$stud_nomat = null;
+		$stud_nokp = null;
+		$prog_id = null;
 		$user_email = null;
 		$user_nophone = null;
-		$user_name = null;
-		$user_status = null; 
 	}
 @endphp
 
-<form id="DetailStaffForm">
+<form id="DetailStudForm">
 	@csrf
 
-	@if ($user_id)
-		<input type="hidden" name="usid" id="usid" value="{{ $user_id }}">
+	@if ($contr_func == "edit" AND !empty($user_id))
+		<input type="hidden" name="usrid" id="usrid" value="{{ $user_id }}">
 	@endif
+
+	<div class="section-title mt-0">Student Information</div>
 
 	<div class="form-group row mb-2">
 		<label class="col-md-3 col-form-label font-weight-bold" for="ufname">Fullname <span class="text-danger">*</span></label>
@@ -38,13 +41,27 @@
 	</div>
 
 	<div class="form-group row mb-2">
-		<label class="col-md-3 col-form-label font-weight-bold" for="lvlid">Level <span class="text-danger">*</span></label>
+		<label class="col-md-3 col-form-label font-weight-bold" for="snomat">No. Matric <span class="text-danger">*</span></label>
+		<div class="col-md-5">
+			<input type="text" class="form-control" id="snomat" name="snomat" value="{{ $stud_nomat }}">
+		</div>
+	</div>
+
+	<div class="form-group row mb-2">
+		<label class="col-md-3 col-form-label font-weight-bold" for="snokp">No. MyKad <span class="text-danger">*</span></label>
+		<div class="col-md-5">
+			<input type="text" class="form-control" id="snokp" name="snokp" value="{{ $stud_nokp }}">
+		</div>
+	</div>
+
+	<div class="form-group row mb-2">
+		<label class="col-md-3 col-form-label font-weight-bold" for="prgid">Program <span class="text-danger">*</span></label>
 		<div class="col-md-6">
-			<select class="form-control" id="lvlid" name="lvlid">
+			<select class="form-control" id="prgid" name="prgid">
 				<option></option>
-				@if (!$levels->isEmpty())
-					@foreach ($levels as $lvl)
-						<option value="{{ $lvl->level_id }}" @if ($lvl->level_id == $level_id){{ 'selected' }}@endif>{{ $lvl->level_name }}</option>
+				@if (!$programs->isEmpty())
+					@foreach ($programs as $prg)
+						<option value="{{ $prg->prog_id }}" @if ($prg->prog_id == $prog_id){{ 'selected' }}@endif>{{ $prg->prog_name }}</option>
 					@endforeach
 				@endif
 			</select>
@@ -67,6 +84,8 @@
 
 	<hr>
 
+	<div class="section-title mt-0">User Information</div>
+
 	@if ($contr_func == "add")
 		<div class="form-group row mb-2">
 			<label class="col-md-3 col-form-label font-weight-bold" for="usrname">User ID <span class="text-danger">*</span></label>
@@ -88,11 +107,11 @@
 				<input type="password" class="form-control" id="ucnfpsswd" name="ucnfpsswd">
 			</div>
 		</div>
-	@elseif ($contr_func == "edit")
+	@else
 		<div class="form-group row mb-2">
 			<label class="col-md-3 col-form-label font-weight-bold">User ID</label>
 			<div class="col-md-9">
-				<label class="col-form-label">{{ $staff->user_name }}</label>
+				<label class="col-form-label">{{ $stud->user_name }}</label>
 			</div>
 		</div>
 
@@ -108,7 +127,7 @@
 		</div>
 	@endif
 
-	<div class="form-group row mt-4 mb-0">
+	<div class="form-group row mb-0">
 		<div class="col-md-12 text-right">
 			<button type="submit" class="btn btn-icon icon-left btn-primary">
 				<i class="fas fa-save"></i> Save
@@ -118,26 +137,35 @@
 </form>
 
 <script>
-	$(document).ready(()=>{
-		$('#lvlid').select2({
-			placeholder: "Choose level..",
+	$(document).ready(function(){
+		$('#prgid').select2({
+			placeholder: "Choose program..",
 		});
-
+		$('#snomat').inputmask({regex:"^[A-Za-z0-9]*$"});
+		$('#snokp').inputmask({regex:"[0-9]{6}-[0-9]{2}-[0-9]{4}"});
 		$('#unophone').inputmask({regex:"^[0-9]*$"});
 
 		@if ($contr_func == "add")
 			$('#usrname').inputmask({regex:"^[A-Za-z0-9]*$"});
-		@elseif ($contr_func == "edit")
+		@else 
 			$('#ustatus').select2();
 		@endif
 	});
 
-	$('#DetailStaffForm').validate({
+	$('#DetailStudForm').validate({
 		rules: {
 			ufname: {
 				required: true,
 			},
-			lvlid: {
+			snomat: {
+				required: true,
+				regex: "^[A-Za-z0-9]*$",
+			},
+			snokp: {
+				required: true,
+				regex: "[0-9]{6}-[0-9]{2}-[0-9]{4}",
+			},
+			prgid: {
 				required: true,
 			},
 			uemail: {
@@ -160,7 +188,7 @@
 					//minlength: 8, 
 					equalTo: "#upsswd",
 				},
-			@elseif ($contr_func == "edit")
+			@else 
 				ustatus: {
 					required: true,
 				},
@@ -170,8 +198,16 @@
 			ufname: {
 				required: "Please enter Fullname.",
 			},
-			lvlid: {
-				required: "Please choose Level.",
+			snomat: {
+				required: "Please enter No. Matric.",
+				regex: "Please enter a valid format of No. Matric.",
+			},
+			snokp: {
+				required: "Please enter No. MyKad.",
+				regex: "Please enter a valid format of No. MyKad.",
+			},
+			prgid: {
+				required: "Please choose Program.",
 			},
 			uemail: {
 				regex: "Please enter a valid format of Email.",
@@ -193,7 +229,7 @@
 					//minlength: "Password must be at least 8 characters.", 
 					equalTo: "Confirm Password Is Not Match.",
 				},
-			@elseif ($contr_func == "edit")
+			@else
 				ustatus: {
 					required: "Please choose Status.",
 				},
@@ -202,13 +238,13 @@
 		submitHandler: function(form){
 			var form_data = $(form).serialize();
 			$.ajax({
-				url: "/manage/user/{{ $contr_func }}/staff",
+				url: "/manage/user/{{ $contr_func }}/stud",
 				type: "post",
 				dataType: "json",
 				data: form_data,
 				success: function(resp) {
 					if (resp.success) {
-						$('.section').load('/manage/users/list/ADMN')
+						$('.section').load('/manage/users/list/STUD')
 					}
 					else if ('target_reset' in resp) {
 						$(resp.target_reset).val("");
