@@ -52,9 +52,10 @@ class ManageUser extends Controller
 
 	public function info_user ($user_id){
 		$get_user = DB::table('users as usr')
-						->selectRaw('usr.*, lvl.*, stu.*, usr.user_id, lvl.level_id, stu.stud_id')
+						->selectRaw('usr.*, lvl.*, stu.*, prg.*, usr.user_id, lvl.level_id, stu.stud_id, prg.prog_id')
 						->join('levels as lvl', 'lvl.level_id', 'usr.level_id')
 						->leftJoin('students as stu', 'stu.user_id', 'usr.user_id')
+						->leftJoin('programs as prg', 'prg.prog_id', 'stu.prog_id')
 						->where('usr.user_id', $user_id)
 						->first();
 
@@ -125,7 +126,7 @@ class ManageUser extends Controller
 				return response()->json(["success" => false, "msg" => "Please enter a valid format of No. Phone.", "target_reset" => "#unophone"]);
 			}
 			// check user_nophone available or not
-			if ( $check_uemail = DB::table('users')->where("user_email", $user_email)->first()){
+			if ( $check_unophone = DB::table('users')->where("user_nophone", $user_nophone)->first()){
 				return response()->json(["success" => false, "msg" => "That No. Phone already Exist.", "target_reset" => "#unophone"]);
 			}
 		}
@@ -263,7 +264,7 @@ class ManageUser extends Controller
 				return response()->json(["success" => false, "msg" => "Please enter a valid format of No. Phone.", "target_reset" => "#unophone"]);
 			}
 			// check user_nophone available or not
-			if ( $check_uemail = DB::table('users')->whereRaw("user_id <> $user_id AND user_email = '$user_email'")->first()){
+			if ( $check_unophone = DB::table('users')->whereRaw("user_id <> $user_id AND user_nophone = '$user_nophone'")->first()){
 				return response()->json(["success" => false, "msg" => "That No. Phone already Exist.", "target_reset" => "#unophone"]);
 			}
 		}
@@ -367,7 +368,7 @@ class ManageUser extends Controller
 				return response()->json(["success" => false, "msg" => "Please enter a valid format of No. Phone.", "target_reset" => "#unophone"]);
 			}
 			// check user_nophone available or not
-			if ( $check_uemail = DB::table('users')->where("user_email", $user_email)->first()){
+			if ( $check_unophone = DB::table('users')->where("user_nophone", $user_nophone)->first()){
 				return response()->json(["success" => false, "msg" => "That No. Phone already Exist.", "target_reset" => "#unophone"]);
 			}
 		}
@@ -540,7 +541,7 @@ class ManageUser extends Controller
 				return response()->json(["success" => false, "msg" => "Please enter a valid format of No. Phone.", "target_reset" => "#unophone"]);
 			}
 			// check user_nophone available or not
-			if ( $check_uemail = DB::table('users')->whereRaw("user_id <> $user_id AND user_email = '$user_email'")->first()){
+			if ( $check_unophone = DB::table('users')->whereRaw("user_id <> $user_id AND user_nophone = '$user_nophone'")->first()){
 				return response()->json(["success" => false, "msg" => "That No. Phone already Exist.", "target_reset" => "#unophone"]);
 			}
 		}

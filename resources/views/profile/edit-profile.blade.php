@@ -57,21 +57,6 @@
 							<div class="form-group row mb-2">
 								{{--
 								<!--
-								<label class="col-md-3 col-form-label font-weight-bold" for="sfname">Fullname <span class="text-danger">*</span></label>
-								<div class="col-md-9">
-									<input type="text" class="form-control" id="sfname" name="sfname" value="{{ $user->stud_fullname }}">
-								</div>
-								-->
-								--}}
-								<label class="col-md-3 col-form-label font-weight-bold">Fullname</label>
-								<div class="col-md-9">
-									<label class="col-form-label mb-0">{{ $user->stud_fullname }}</label>
-								</div>
-							</div>
-
-							<div class="form-group row mb-2">
-								{{--
-								<!--
 								<label class="col-md-3 col-form-label font-weight-bold" for="snomat">No. Matric <span class="text-danger">*</span></label>
 								<div class="col-md-4">
 									<input type="text" class="form-control" id="snomat" name="snomat" value="{{ $user->stud_nomat }}">

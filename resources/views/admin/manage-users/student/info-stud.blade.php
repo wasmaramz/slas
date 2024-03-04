@@ -26,6 +26,11 @@
 	</div>
 
 	<div class="form-group row mb-2">
+		<div class="col-md-3 col-form-label font-weight-bold">Program</div>
+		<div class="col-md-9 col-form-label">{{ $user->prog_name }}</div>
+	</div>
+
+	<div class="form-group row mb-2">
 		<div class="col-md-3 col-form-label font-weight-bold">Level</div>
 		<div class="col-md-9 col-form-label">{{ $user->level_name }}</div>
 	</div>
@@ -50,11 +55,11 @@
 
 	<div class="form-group row mb-2">
 		<div class="col-md-3 col-form-label font-weight-bold">Email</div>
-		<div class="col-md-9 col-form-label">{{ $user->user_email }}</div>
+		<div class="col-md-9 col-form-label">{{ $user->user_email ?? "-" }}</div>
 	</div>
 
 	<div class="form-group row mb-2">
 		<div class="col-md-3 col-form-label font-weight-bold">No. Phone</div>
-		<div class="col-md-9 col-form-label">{{ $user->user_nophone }}</div>
+		<div class="col-md-9 col-form-label">{{ $user->user_nophone ?? "-" }}</div>
 	</div>
 @endif

@@ -33,7 +33,9 @@ class DatabaseSeeder extends Seeder
 		\App\Models\Program::create(["prog_code" => "ICT", "prog_name" => "Diploma Kejuruteraan Elektronik Bioperubatan (Teknologi Maklumat dan Komunikasi)", "created_at" => now(), "updated_at" => now()]);
 		\App\Models\Program::create(["prog_code" => "DCN", "prog_name" => "Diploma Kompetensi Rangkaian Komputer dan Sistem Pentadbiran", "created_at" => now(), "updated_at" => now()]);
 
-		\App\Models\FormType::create(["ftype_name" => "LAMPIRAN A", "ftype_desc" => "KELULUSAN CUTI MELEBIHI 3 HARI", "created_at" => now(), "updated_at" => now()]);
-		\App\Models\FormType::create(["ftype_name" => "LAMPIRAN B", "ftype_desc" => "KELULUSAN CUTI KURANG 3 HARI", "created_at" => now(), "updated_at" => now()]);
+		$ftype_desc1 = "Cuti melebihi 3 hari adalah dengan sokongan Ketua Program/ Ketua Jabatan dan kelulusan daripada Timbalan Pengarah(HEA)/ Timbalan Pengarah(KPHP).";
+		\App\Models\FormType::create(["ftype_name" => "LAMPIRAN A", "ftype_memo" => "CUTI MELEBIHI 3 HARI", "ftype_desc" => $ftype_desc1, "created_at" => now(), "updated_at" => now()]);
+		$ftype_desc2 = "Cuti kurang 3 hari adalah dengan sokongan Pensyarah yang mengajar kursus pada hari yang diambil cuti dan kelulusan daripada Ketua Program/Ketua Jabatan.";
+		\App\Models\FormType::create(["ftype_name" => "LAMPIRAN B", "ftype_memo" =>"CUTI KURANG 3 HARI", "ftype_desc" => $ftype_desc2, "created_at" => now(), "updated_at" => now()]);
     }
 }
