@@ -14,10 +14,12 @@ return new class extends Migration
         Schema::create('form_types', function (Blueprint $table) {
             $table->increments('ftype_id');
 			$table->string('ftype_name');
+			$table->string('ftype_memo')->nullable();
 			$table->string('ftype_desc')->nullable();
             $table->timestamps();
 
 			$table->index('ftype_name');
+			$table->index('ftype_memo');
 			$table->index('ftype_desc');
         });
     }

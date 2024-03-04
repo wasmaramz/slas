@@ -16,6 +16,7 @@
 	<link rel="stylesheet" href="/node_modules/datatables.net-bs4/css/dataTables.bootstrap4.min.css">
 	<link rel="stylesheet" href="/node_modules/datatables.net-select-bs4/css/select.bootstrap4.min.css">
 	<link rel="stylesheet" href="/node_modules/select2/dist/css/select2.min.css">
+	<link rel="stylesheet" href="/node_modules/bootstrap-daterangepicker/daterangepicker.css">
 
 	<!-- Page Specific CSS Libraries -->
 
@@ -60,6 +61,7 @@
 	<script src="/node_modules/datatables/media/js/jquery.dataTables.min.js"></script>
 	<script src="/node_modules/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
 	<script src="/node_modules/select2/dist/js/select2.full.min.js"></script>
+	<script src="/node_modules/bootstrap-daterangepicker/daterangepicker.js"></script>
 
 	<!-- Page Specific JS Libraries -->
 

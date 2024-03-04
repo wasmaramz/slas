@@ -29,4 +29,19 @@ Route::middleware(App\Http\Middleware\IsAuthenticate::class)->group(function(){
 		Route::match(['get', 'post'], '/manage/user/change/password/{user_id?}', 'change_password_user');
 		Route::post('/manage/user/delete', 'delete_user');
 	});
+
+	Route::controller(App\Http\Controllers\Student\ManageApplication::class)->group(function(){
+		Route::get('/manage/application', 'list_appl');
+		Route::match(["get", "post"], '/manage/add/application', 'add_appl');
+		Route::get('/manage/application/info/{form_id}', 'info_appl');
+	});
+
+	Route::controller(App\Http\Controllers\KetuaProgram\VerifyApplication::class)->group(function(){
+		Route::get('/verify/application', 'list_appl');
+		Route::match(['get', 'post'], '/verify/application/edit/{form_id?}', 'edit_form');
+	});
+
+	Route::controller(App\Http\Controllers\Manual::class)->group(function(){
+		Route::get('/manual/leave/info', 'leave_info');
+	});
 });

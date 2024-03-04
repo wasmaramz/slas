@@ -53,11 +53,11 @@ class Authenticate extends Controller
 			}
 
 			if (! $level = DB::table('levels')->where('level_id', $user->level_id)->first()){
+				Auth::logout();
 				return response()->json(["success" => false, "msg" => "Record of level not found."]);
 			}
 
-			session()->regenerate();
-			session([
+			$arr_session = [
 				"sess_user_id" => $user->user_id,
 				"sess_user_fullname" => $user->user_fullname,
 				"sess_user_name" => $user->user_name,
@@ -66,9 +66,21 @@ class Authenticate extends Controller
 				"sess_user_status" => $user->user_status,
 				"sess_user_email" => $user->user_email,
 				"sess_user_nophone" => $user->user_nophone,
-			]);
+			];
 
-			return response()->json(["success" => true, "msg" => "Login Successed, Welcome!"]);
+			if ($user->level_id == "STUD"){
+				if (! $check_stud = DB::table('students')->where('user_id', $user->user_id)->first()){
+					Auth::logout();
+					return response()->json(["success" => false, "msg" => "Student Record Not Found."]);
+				}
+				$arr_session['sess_stud_id'] = $check_stud->stud_id;
+				$arr_session['sess_prog_id'] = $check_stud->prog_id;
+			}
+
+			session()->regenerate();
+			session($arr_session);
+
+			return response()->json(["success" => true, "msg" => "Login Successed, Welcome $user->user_fullname!"]);
 		}
 		else{
 			return response()->json(["success" => false, "msg" => "Login failed."]);

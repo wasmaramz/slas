@@ -39,10 +39,14 @@
 		@endcan 
 
 		@can ('KEPR')
+			<li>
+				<a href="javascript:void(0)" class="nav-link" onclick="$('.section').load('/manage/users/list/STUD')"><i class="fas fa-users"></i><span>Manage Student</span></a>
+			</li>
+
 			<li class="menu-header">Leave Application</li>
 
 			<li>
-				<a href="javascript:void(0)" class="nav-link" onclick="swal('Still In Development')"><i class="fas fa-pen-fancy"></i><span>Approve Application</span></a>
+				<a href="javascript:void(0)" class="nav-link" onclick="$('.section').load('/verify/application')"><i class="fas fa-pen-fancy"></i><span>Verify Application</span></a>
 			</li>
 		@endcan
 
@@ -64,7 +68,7 @@
 
 		@can ('STUD')
 			<li>
-				<a href="javascript:void(0)" class="nav-link" onclick="swal('Still In Development')"><i class="fas fa-list"></i><span>Leave Application</span></a>
+				<a href="javascript:void(0)" class="nav-link" onclick="$('.section').load('/manage/application')"><i class="fas fa-folder"></i><span>Leave Application</span></a>
 			</li>
 		@endcan
 
@@ -75,6 +79,12 @@
 				<a href="javascript:void(0)" class="nav-link" onclick="swal('Still In Development')"><i class="fas fa-file-pdf"></i><span>Leave Record</span></a>
 			</li>
 		@endcan
+
+		<li class="menu-header">Manual</li>
+
+		<li>
+			<a href="javascript:void(0)" class="nav-link" onclick="$('.section').load('/manual/leave/info')"><i class="fas fa-info"></i><span>Leave Info</span></a>
+		</li>
 	</ul>
 	<!-- END SIDEBAR MENU -->
 

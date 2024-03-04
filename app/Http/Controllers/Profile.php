@@ -27,7 +27,7 @@ class Profile extends Controller
 			!$check_user = DB::table('users as usr')
 				->selectRaw(
 					"usr.user_id, usr.user_fullname, usr.user_name, usr.level_id, lvl.level_name, usr.user_email, usr.user_nophone, " . 
-					"std.stud_id, std.stud_fullname, std.stud_nomat, std.stud_nokp, std.prog_id, prg.prog_name"
+					"std.stud_id, std.stud_nomat, std.stud_nokp, std.prog_id, prg.prog_name"
 				)
 				->join('levels as lvl', 'lvl.level_id', 'usr.level_id')
 				->leftJoin('students as std', 'std.user_id', 'usr.user_id')
@@ -61,13 +61,24 @@ class Profile extends Controller
 			return response()->json(["success" => false, "msg" => "User Record Not Found."]);
 		}
 
+		// check user_nophone 
+		if ($user_nophone) {
+			// check format nophone if not empty
+			if (!is_numeric($user_nophone)){
+				return response()->json(["success" => false, "msg" => "Please enter a valid format of No. Phone."]);
+			}
+			// check user_nophone available or not
+			if ( $check_unophone = DB::table('users')->whereRaw("user_id <> $sess_user_id AND user_nophone = $user_nophone")->first()){
+				return response()->json(["success" => false, "msg" => "That No. Phone already Exist."]);
+			}
+		}
+
 		// check student information 
 		if ($check_user->level_id == "STUD"){
 			/*
-			if (empty($request->sfname) OR empty($request->snomat) || empty($request->snokp)){
+			if (empty($request->snomat) || empty($request->snokp)){
 				return response()->json(["success" => false, "msg" => "Not Enough Student Information"]);
 			}
-			$stud_fullname = $request->sfname;
 			$stud_nomat = $request->snomat;
 			$stud_nokp = preg_replace('/[^0-9]/', '', $request->snokp;
 			if ($check_stud_nokp = DB::table('students')->where('stud_nokp', $stud_nokp)->first()){
@@ -93,18 +104,16 @@ class Profile extends Controller
 				return response()->json(["success" => false, "msg" => "Update User Record Was Failed."]);
 			}
 
-			/*
 			$stud_params = [
-				"stud_fullname" => $stud_fullname,
-				"stud_nomat" => $stud_nomat,
-				"stud_nokp" => $stud_nokp,
+				"stud_fullname" => $user_fullname,
+				//"stud_nomat" => $stud_nomat,
+				//"stud_nokp" => $stud_nokp,
 				"updated_by" => $sess_user_id,
 			];
 			if (!$upd_stud = Student::where('stud_id', $stud_id)->update($stud_params)){
 				DB::rollBack();
 				return response()->json(["success" => false, "msg" => "Update Student Record Was Failed."]);
 			}
-			 */
 
 			DB::commit(); //commit those transaction ...
 

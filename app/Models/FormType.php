@@ -15,6 +15,7 @@ class FormType extends Model
 
 	protected $fillable = [
 		'ftype_name',
+		'ftype_memo',
 		'ftype_desc',
 		'created_at',
 		'updated_at',
