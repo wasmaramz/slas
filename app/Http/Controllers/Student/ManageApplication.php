@@ -53,7 +53,7 @@ class ManageApplication extends Controller
 		$sess_prog_id = session('sess_prog_id');
 
 		// check unfinish (FLAG = BARU, PENDING, KIV)
-		if ($check_unfinish = DB::table('forms')->whereIn('form_flag', ["BARU", "PENDING", "KIV"])->first()){
+		if ($check_unfinish = DB::table('forms')->where('stud_id', $sess_stud_id)->whereIn('form_flag', ["BARU", "PENDING", "KIV"])->first()){
 			return response()->json(["success" => false, "msg" => "Please wait until past appplication settled."]);
 		}
 
@@ -92,6 +92,11 @@ class ManageApplication extends Controller
 
 		$stud_id = $request->stid;
 		$ftype_id = $request->ftid;
+
+		// check unfinish (FLAG = BARU, PENDING, KIV)
+		if ($check_unfinish = DB::table('forms')->where('stud_id', $stud_id)->whereIn('form_flag', ["BARU", "PENDING", "KIV"])->first()){
+			return response()->json(["success" => false, "msg" => "Please wait until past appplication settled."]);
+		}
 
 		// check for stud_id 
 		if (! $check_stid = DB::table('students')->where('stud_id', $stud_id)->first()){
